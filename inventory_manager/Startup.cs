@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using inventory_manager.Models;
 
 namespace inventory_manager
 {
@@ -25,6 +27,8 @@ namespace inventory_manager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<InventoryContext>(options => options.UseInMemoryDatabase("Inventory"));
+
             services.AddControllers();
         }
 
