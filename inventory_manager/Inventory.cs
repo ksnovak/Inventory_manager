@@ -12,3 +12,4 @@ namespace inventory_manager
         public int Cost { get; set; }
     }
 }
+ 
