@@ -48,17 +48,28 @@ export class Search extends Component {
 
     render() {
         const { results, loading } = this.state;
-        let contents = loading
-            ? <p><em>Loading...</em></p>
-            : results ? Search.renderInventory(results) : '';
+ 
+        let contents = '';
+
+        if (loading) {
+            contents = <p><em>Loading...</em></p>
+        }
+        else if (results) {
+            if (results.status && results.status == 404) {
+                contents = <p><em>Could not find any item by that name, please check the spelling and try again</em></p>
+            }
+            else {
+                contents = Search.renderInventory(results)
+            }
+        }
 
         return (
             <div>
                 <h1 id="tabelLabel" >Widget Stocks</h1>
                 <p>Is there a specific item you had in mind?</p>
 
-                <label htmlFor="nameInput">Item Name:  </label>
-                <input type="text" id="nameInput" name="nameInput" value={this.state.searchName} onChange={this.handleInput} hint="blah" />
+                <label htmlFor="nameInput">Item Name:&nbsp;&nbsp;</label>
+                <input type="text" id="nameInput" name="nameInput" value={this.state.searchName} onChange={this.handleInput} hint="blah" />&nbsp;
                 <button type="button" onClick={this.handleSearch}>Search</button>
 
                 {contents}
