@@ -23,3 +23,11 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+    - name: Publish
+      run: dotnet publish -c Release -o dotnetcorewebapp
+    - name: 'Run Azure deploy'
+      uses: azure/webapps-deploy@v1 
+      with:
+         app-name: KsnovakInventorymanager
+         publish-profile: $
+         package: './dotnetcorewebapp'
