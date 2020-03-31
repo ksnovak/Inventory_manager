@@ -17,7 +17,7 @@ namespace inventory_manager.Controllers
     
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class InventoryController : ControllerBase
     {
 

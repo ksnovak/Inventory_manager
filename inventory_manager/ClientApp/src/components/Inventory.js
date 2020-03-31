@@ -5,7 +5,7 @@ export class Inventory extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { inventory: [], loading: true };
+        this.state = { inventory: [], loading: true, maxOnly: true };
     }
 
     componentDidMount() {
@@ -24,10 +24,10 @@ export class Inventory extends Component {
                 </thead>
                 <tbody>
                     {items.map(item =>
-                        <tr key={item.ID}>
-                            <td>{item.ID}</td>
-                            <td>{item.Name}</td>
-                            <td>{item.Cost}</td>
+                        <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.name}</td>
+                            <td>{item.cost}</td>
                         </tr>
                     )}
                 </tbody>
@@ -38,7 +38,7 @@ export class Inventory extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : Inventory.renderInventory(this.state.forecasts);
+            : Inventory.renderInventory(this.state.inventory);
 
         return (
             <div>
@@ -50,8 +50,9 @@ export class Inventory extends Component {
     }
 
     async fetchInventoryData() {
-        const response = await fetch('inventory');
+        const response = await fetch(`api/inventory${this.state.maxOnly ? '/max' : ''} `);
         const data = await response.json();
+        console.log(data);
         this.setState({ inventory: data, loading: false });
     }
 }
