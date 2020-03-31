@@ -5,7 +5,9 @@ export class Inventory extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { inventory: [], loading: true, maxOnly: true };
+        this.state = { inventory: [], loading: true, maxOnly: false };
+
+        this.handleMaxToggle = this.handleMaxToggle.bind(this);
     }
 
     componentDidMount() {
@@ -35,15 +37,25 @@ export class Inventory extends Component {
         );
     }
 
+    handleMaxToggle(event) {
+        this.setState({ maxOnly: event.target.checked }, () => {
+            this.fetchInventoryData();
+        })
+    }
+
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : Inventory.renderInventory(this.state.inventory);
 
+        const { maxOnly }= this.state;
+
         return (
             <div>
                 <h1 id="tabelLabel" >Widget Stocks</h1>
-                <p>Here are all of the widgets we have for sale, and their greatly affordable prices</p>
+
+                <input type="checkbox" id="showMaxOnly" name="showMaxOnly" value={maxOnly} onClick={this.handleMaxToggle} /> <label htmlFor="showMaxOnly">Show most expensive listings only?</label>
+                <p>{maxOnly ? 'Here are our most exquisite widget offerings, for the discerning customer' : 'Here are all of the widgets we have for sale, and their greatly affordable prices'}</p>
                 {contents}
             </div>
         );
@@ -52,7 +64,6 @@ export class Inventory extends Component {
     async fetchInventoryData() {
         const response = await fetch(`api/inventory${this.state.maxOnly ? '/max' : ''} `);
         const data = await response.json();
-        console.log(data);
         this.setState({ inventory: data, loading: false });
     }
 }
