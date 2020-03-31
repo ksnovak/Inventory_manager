@@ -29,5 +29,5 @@ jobs:
       uses: azure/webapps-deploy@v1 
       with:
          app-name: KsnovakInventorymanager
-         publish-profile: $
+         publish-profile: ${{ secrets.publish_profile }}
          package: './dotnetcorewebapp'
