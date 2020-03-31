@@ -21,7 +21,7 @@ export class Inventory extends Component {
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Cost</th>
+                        <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +29,7 @@ export class Inventory extends Component {
                         <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.name}</td>
-                            <td>{item.cost}</td>
+                            <td>${item.cost}</td>
                         </tr>
                     )}
                 </tbody>
@@ -53,6 +53,7 @@ export class Inventory extends Component {
         return (
             <div>
                 <h1 id="tabelLabel" >Widget Stocks</h1>
+                <p>Are you looking to buy a widget for your family and loved ones?</p>
 
                 <input type="checkbox" id="showMaxOnly" name="showMaxOnly" value={maxOnly} onClick={this.handleMaxToggle} /> <label htmlFor="showMaxOnly">Show most expensive listings only?</label>
                 <p>{maxOnly ? 'Here are our most exquisite widget offerings, for the discerning customer' : 'Here are all of the widgets we have for sale, and their greatly affordable prices'}</p>
