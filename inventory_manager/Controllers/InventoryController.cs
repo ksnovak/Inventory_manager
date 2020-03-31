@@ -99,18 +99,30 @@ namespace inventory_manager.Controllers
 
         // Requirement 3
         // Take as an input an item name and returns the max price for it
-        [HttpGet("item/{name}")]
+        [HttpGet("max/{name}")]
         public async Task<ActionResult<Inventory>> GetByName(string name)
         {
-            //var inventory = await _context.InventoryItems.FindAsync(name);
-            var inventory = await _context.InventoryItems.FirstAsync<Inventory>();
+            try { 
+                //Search for the name in the database, order results by price, and then take the first result
+                var inventory = await _context.InventoryItems
+                    .Where(item => item.Name.ToLower().Equals(name.ToLower()))
+                    .OrderByDescending(item => item.Cost)
+                    .FirstOrDefaultAsync();
 
-            if (inventory == null)
+
+                // Give back a 404 message if the item isn't in database
+                if (inventory == null)
+                {
+                    return NotFound();
+                }
+
+                return inventory;
+            }
+            catch
             {
+                // Give back a 404 message if the item isn't in database
                 return NotFound();
             }
-
-            return inventory;
         }
 
 
