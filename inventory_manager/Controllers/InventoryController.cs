@@ -64,16 +64,37 @@ namespace inventory_manager.Controllers
 
 
         // Requirement 2
-        // Return a list of max prices of items, grouped by item.name
+        // Get the max price for each item
         [HttpGet("max")]
-        public Inventory GetMax()
+        public async Task<ActionResult<IEnumerable<Inventory>>> GetMax()
         {
-            return new Inventory
-            {
-                ID = 999,
-                Name = "Biggest item!",
-                Cost = 1
-            };
+            
+            //For each unique item, find the highest price and its associated ID
+            var query = from ranked in (from items in _context.InventoryItems
+                    orderby items.Name
+                    select new 
+                    {
+                        items.Name,
+                        items.Cost,
+                        items.ID,
+                        // To find the most expensive and remove duplicates, we rank by cost (and then ID)
+                        Rank = (from inner in _context.InventoryItems
+                            where inner.Name == items.Name && (
+                                (inner.ID != items.ID && inner.Cost > items.Cost) //Different IDs -> compare costs
+                                || (inner.Cost == items.Cost && inner.ID < items.ID) //Different costs -> use IDs to pick just one
+                            )
+                            select inner
+                        ).Count() + 1   //Counting occurrences as a way to rank them
+                    })
+                    where ranked.Rank == 1 //Only retrieve the highest-rank item for each unique name
+                    select new Inventory {
+                        Name = ranked.Name,
+                        Cost = ranked.Cost,
+                        ID = ranked.ID
+                    };
+
+
+            return await query.ToListAsync();
         }
 
         // Requirement 3
