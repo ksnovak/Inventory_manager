@@ -39,7 +39,7 @@ namespace inventory_manager.Controllers
         {
 
             //Read from the file, into a stream
-            using (var reader = new StreamReader("./items.txt"))
+            using (var reader = new StreamReader("items.txt"))
 
             //Parse the stream as a CSV set of data
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
