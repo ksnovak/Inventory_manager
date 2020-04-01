@@ -2,12 +2,12 @@ name: .NET Core
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, azure-backend-testing ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  build:
+  build-and-deploy:
 
     runs-on: ubuntu-latest
 
@@ -21,8 +21,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
     - name: Publish
       run: dotnet publish -c Release -o dotnetcorewebapp
     - name: 'Run Azure deploy'
